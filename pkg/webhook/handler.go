@@ -81,7 +81,9 @@ func (h *handler) Handle(ctx context.Context, req admission.Request) admission.R
 					return admission.Errored(http.StatusInternalServerError, err)
 				}
 
-				return admission.PatchResponseFromRaw(req.Object.Raw, marshalled)
+				resp := admission.PatchResponseFromRaw(req.Object.Raw, marshalled)
+				logger.WithValues("patches", resp.Patches).Info("generated patch")
+				return resp
 			}
 
 			return resp
